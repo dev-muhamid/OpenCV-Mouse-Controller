@@ -14,16 +14,23 @@ os.environ['TF_FORCE_GPU_ALLOW_GROWTH'] = 'true'
 has_gpu = gpu_available(use_tensorflow=False)
 print(f"GPU available: {has_gpu}")
 
-# Initialize MediaPipe Hands
+# Initialize MediaPipe Hands with GPU
 mp_drawing = mp.solutions.drawing_utils
 mp_hands = mp.solutions.hands
+
+# Initialize MediaPipe Hands with a complexity that matches availability
+model_complexity = 1 if has_gpu else 0
 hands = mp_hands.Hands(
     static_image_mode=False,
     max_num_hands=1,
     min_detection_confidence=0.7,
     min_tracking_confidence=0.5,
-    model_complexity=0
+    model_complexity=model_complexity
 )
+if has_gpu:
+    print("MediaPipe initialized - GPU detected (attempting GPU acceleration)")
+else:
+    print("MediaPipe initialized - no GPU detected (using CPU settings)")
 
 # Function to label hand movements and perform mouse operations
 def label_and_control_mouse(frame): 
