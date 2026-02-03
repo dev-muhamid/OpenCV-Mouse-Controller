@@ -3,6 +3,16 @@ import mediapipe as mp
 import pyautogui
 import math
 import time
+import os
+from gpu_check import gpu_available
+
+# Set environment variables for GPU
+os.environ['CUDA_VISIBLE_DEVICES'] = '0'
+os.environ['TF_FORCE_GPU_ALLOW_GROWTH'] = 'true'
+
+# Best-effort GPU availability check (fast; no TensorFlow import by default)
+has_gpu = gpu_available(use_tensorflow=False)
+print(f"GPU available: {has_gpu}")
 
 # Initialize MediaPipe Hands
 mp_drawing = mp.solutions.drawing_utils
